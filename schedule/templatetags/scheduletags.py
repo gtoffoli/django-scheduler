@@ -64,6 +64,7 @@ def daily_table(context, day, start=8, end=20, increment=30):
     # get slots to display on the left
     slots = _cook_slots(day_part, increment)
     context["slots"] = slots
+    context["day"] = day
     return context
 
 
