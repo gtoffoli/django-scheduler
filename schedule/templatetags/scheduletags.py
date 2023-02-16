@@ -65,7 +65,16 @@ def daily_table(context, day, start=8, end=20, increment=30):
     slots = _cook_slots(day_part, increment)
     context["slots"] = slots
     context["day"] = day
+    context["slot_duration"] = datetime.timedelta(minutes=increment)
     return context
+
+@register.filter(name='add_delta')
+def add_delta(value, delta):
+    return value + delta
+
+@register.filter(name='sub_delta')
+def sub_delta(value, delta):
+    return value - delta
 
 
 @register.inclusion_tag("schedule/_event_title.html", takes_context=True)
@@ -196,11 +205,12 @@ def querystring_for_date(date, num=6):
         ("second", date.second),
     ]
     query_string = "?" + urlencode(qs_parts[:num])
+    return query_string
     # For compatibility with older Django versions, escape the
     # output. Starting with Django 1.9, simple_tags are automatically
     # passed through conditional_escape(). See:
     # https://docs.djangoproject.com/en/1.9/releases/1.9/#simple-tag-now-wraps-tag-output-in-conditional-escape
-    return escape(query_string)
+    # return escape(query_string)
 
 
 @register.simple_tag
