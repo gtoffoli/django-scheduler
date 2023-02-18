@@ -231,6 +231,7 @@ class CreateEventView(EventEditMixin, CreateView):
                 initial_data = {
                     "start": start,
                     "end": start + datetime.timedelta(minutes=30),
+                    "title": 'no title',
                 }
             except TypeError:
                 raise Http404
@@ -244,6 +245,12 @@ class CreateEventView(EventEditMixin, CreateView):
         event.calendar = get_object_or_404(Calendar, slug=self.kwargs["calendar_slug"])
         event.save()
         return HttpResponseRedirect(event.get_absolute_url())
+
+    def get_context_data(self, **kwargs):
+        print('get_context_data', kwargs)
+        ctx = super().get_context_data(**kwargs)
+        ctx["next"] = get_next_url(self.request, self.kwargs.get("next"))
+        return ctx
 
 
 class DeleteEventView(EventEditMixin, DeleteView):
