@@ -23,16 +23,17 @@ class SpanForm(forms.ModelForm):
 class EventForm(SpanForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+    """
     end_recurring_period = forms.DateTimeField(
         label=_("End recurring period"),
         help_text=_("This date is ignored for one time only events."),
         required=False,
     )
-
+    """
     class Meta:
         model = Event
-        exclude = ("creator", "created_on", "calendar")
+        # exclude = ("creator", "created_on", "calendar")
+        exclude = ("creator", "created_on", "calendar", "rule", "end_recurring_period", "color_event")
 
 
 class OccurrenceForm(SpanForm):
